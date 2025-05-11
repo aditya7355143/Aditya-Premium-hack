@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANXT AI - Premium Prediction</title>
+
+  <!-- FontAwesome & Tailwind -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Particle Animation -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #6d28d9;
+      --secondary: #f59e0b;
+      --accent: #10b981;
+      --dark: #0f172a;
+      --light: #f8fafc;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .glass-container {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .glass-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(109, 40, 217, 0.4);
+      border-color: rgba(109, 40, 217, 0.3);
+    }
+
+    .header-glow {
+      text-shadow: 0 0 15px rgba(109, 40, 217, 0.7);
+    }
+
+    .highlight {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 700;
+    }
+
+    .period-box {
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      padding: 12px 20px;
+      border-radius: 12px;
+      display: inline-block;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4);
+      margin: 8px 0;
+    }
+
+    .animated-btn {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      padding: 12px 28px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+      border: none;
+      font-size: 1rem;
+    }
+
+    .animated-btn:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    }
+
+    .prediction-badge {
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 12px;
+      margin: 12px 0;
+      display: inline-block;
+    }
+    
+    .prediction-big {
+      background: linear-gradient(135deg, #10b981, #34d399);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+    }
+    
+    .prediction-small {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+    }
+    
+    .prediction-pending {
+      background: linear-gradient(135deg, #64748b, #94a3b8);
+      box-shadow: 0 4px 20px rgba(100, 116, 139, 0.4);
+    }
+
+    .chance-indicator {
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    
+    .chance-bar {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--accent), #34d399);
+      transition: width 0.5s ease;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.5);
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .history-item:hover {
+      background: rgba(51, 65, 85, 0.5);
+      transform: translateX(5px);
+    }
+    
+    .history-big {
+      border-left: 4px solid #10b981;
+    }
+    
+    .history-small {
+      border-left: 4px solid #f59e0b;
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .rotate {
+      animation: rotate 4s linear infinite;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
+  <script>
+    function checkInternet() {
+      if (!navigator.onLine) {
+        history.back();
+      }
+    }
+
+    window.addEventListener("load", checkInternet);
+    window.addEventListener("offline", checkInternet);
+  </script>
+
+</head>
+<body>
+
+  <!-- Particle Background -->
+  <div id="particles-js"></div>
+
+  <!-- Header -->
+  <header class="w-full text-center py-6 mb-4">
+    <h1 class="text-4xl font-bold header-glow">
+      <span class="highlight">ADITYA AI</span> <span class="text-xs bg-gradient-to-r from-purple-600 to-emerald-500 text-transparent bg-clip-text">PREMIUM</span>
+    </h1>
+    <p class="text-sm text-slate-400 mt-2">Advanced Prediction System v2.5</p>
+  </header>
+
+  <!-- Period & Timer -->
+  <div class="glass-container">
+    <div class="flex justify-center items-center gap-3 mb-2">
+      <i class="fas fa-clock text-purple-400 text-xl"></i>
+      <h2 class="text-lg font-semibold text-slate-300">Current Period</h2>
+    </div>
+    <p id="period" class="period-box">Loading...</p>
+    <div class="flex justify-center items-center gap-3 mt-3">
+      <i class="fas fa-hourglass-half text-yellow-400"></i>
+      <span id="timer" class="text-xl font-mono">00:00</span>
+    </div>
+  </div>
+
+  <!-- Current Prediction -->
+  <div class="glass-container">
+    <div class="flex justify-center items-center gap-3 mb-2">
+      <i class="fas fa-robot text-emerald-400 text-xl pulse"></i>
+      <h2 class="text-lg font-semibold text-slate-300">AI Prediction</h2>
+    </div>
+    <div id="prediction" class="prediction-badge prediction-pending">Pending</div>
+    <div class="flex flex-col items-center mt-2">
+      <span id="chanceText" class="text-sm font-medium text-slate-400">Calculating accuracy...</span>
+      <div class="w-full max-w-[200px] chance-indicator mt-2">
+        <div id="chanceBar" class="chance-bar" style="width: 0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prediction History -->
+  <div class="glass-container">
+    <div class="flex justify-center items-center gap-3 mb-3">
+      <i class="fas fa-history text-amber-400"></i>
+      <h2 class="text-lg font-semibold text-slate-300">Prediction History</h2>
+    </div>
+    <div id="historyList" class="max-h-[200px] overflow-y-auto pr-2">
+      <!-- History items will be added here -->
+    </div>
+  </div>
+
+  <!-- Refresh Button -->
+  <button class="animated-btn" onclick="window.location.reload();">
+    <i class="fas fa-sync-alt"></i> Refresh Data
+  </button>
+
+  <!-- Floating AI Icon -->
+  <div class="fixed bottom-5 right-5 text-purple-400 text-4xl opacity-30 floating rotate">
+    <i class="fas fa-robot"></i>
+  </div>
+
+  <script>
+    const predictionSequence = ["Big", "Small"];
+    const history = [];
+    let lastPeriod = null;
+
+    function updatePeriodAndTimer() {
+      const now = new Date();
+      const seconds = now.getUTCSeconds();
+      const remainingSeconds = 60 - seconds;
+      const totalMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+
+      const periodNumber = `${now.getUTCFullYear()}${(now.getUTCMonth() + 1).toString().padStart(2, '0')}${now.getUTCDate().toString().padStart(2, '0')}1000${(10001 + totalMinutes)}`;
+      document.getElementById("period").textContent = periodNumber;
+      document.getElementById("timer").textContent = `00:${remainingSeconds.toString().padStart(2, '0')}`;
+
+      if (lastPeriod !== periodNumber) {
+        lastPeriod = periodNumber;
+        resetPrediction();
+        setTimeout(() => { generatePrediction(periodNumber); }, 5000);
+      }
+    }
+
+    function resetPrediction() {
+      const predictionEl = document.getElementById("prediction");
+      predictionEl.className = "prediction-badge prediction-pending";
+      predictionEl.textContent = "Analyzing";
+      document.getElementById("chanceText").textContent = "Calculating accuracy...";
+      document.getElementById("chanceBar").style.width = "0%";
+    }
+
+    function generatePrediction(periodNumber) {
+      const prediction = predictionSequence[Math.floor(Math.random() * predictionSequence.length)];
+      const randomChance = Math.floor(Math.random() * (95 - 75 + 1)) + 75;
+      
+      const predictionEl = document.getElementById("prediction");
+      predictionEl.textContent = prediction;
+      predictionEl.className = `prediction-badge prediction-${prediction.toLowerCase()}`;
+      
+      document.getElementById("chanceText").textContent = `AI Confidence: ${randomChance}%`;
+      document.getElementById("chanceBar").style.width = `${randomChance}%`;
+      
+      // Add to history
+      addToHistory(prediction, randomChance);
+    }
+
+    function addToHistory(prediction, chance) {
+      history.unshift({ prediction, chance });
+      if (history.length > 5) history.pop();
+      
+      updateHistoryDisplay();
+    }
+
+    function updateHistoryDisplay() {
+      const historyList = document.getElementById("historyList");
+      historyList.innerHTML = '';
+      
+      history.forEach((item, index) => {
+        const historyItem = document.createElement('div');
+        historyItem.className = `history-item history-${item.prediction.toLowerCase()}`;
+        
+        historyItem.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="font-medium">${item.prediction}</span>
+            <span class="text-xs bg-slate-700 px-2 py-0.5 rounded-full">${item.chance}%</span>
+          </div>
+          <div class="text-xs text-slate-400">${formatTimeAgo(index)}</div>
+        `;
+        
+        historyList.appendChild(historyItem);
+      });
+    }
+
+    function formatTimeAgo(index) {
+      const minutes = index * 1;
+      return `${minutes} min ago`;
+    }
+
+    // Initialize with some sample history
+    function initSampleHistory() {
+      for (let i = 3; i > 0; i--) {
+        const pred = predictionSequence[Math.floor(Math.random() * predictionSequence.length)];
+        const chance = Math.floor(Math.random() * (95 - 70 + 1)) + 70;
+        history.push({ prediction: pred, chance });
+      }
+      updateHistoryDisplay();
+    }
+
+    // Initialize
+    setInterval(updatePeriodAndTimer, 1000);
+    updatePeriodAndTimer();
+    initSampleHistory();
+
+    // Particle.js configuration
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: "#8b5cf6" },
+        shape: { type: "circle" },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        line_linked: { enable: true, distance: 150, color: "#6d28d9", opacity: 0.3, width: 1 },
+        move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" }
+        }
+      }
+    });
+
+  </script>
+
+</body>
+</html>
